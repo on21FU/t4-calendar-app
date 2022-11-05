@@ -8,19 +8,26 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" >
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div>
-            <button href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-primary">Logout</button> 
-            
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
-        </div>
-        <div class="min-h-screen bg-gray-100">
-                
+    <body>
+        <div class="container-fluid bg-primary shadow p-3 mb-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 bg-warning my-auto">
+                        <h1 class="text-white">Kalender App</h1>
+                    </div>
+                    <div class="col bg-success">
+                        <button href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-light ml-auto">Logout</button> 
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+                    </div>
+                </div>
+            </div>
+        </div>          
+        <div class="min-h-screen bg-gray-100"> 
             <main>
                 {{ $slot }}
             </main>

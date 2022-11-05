@@ -1,3 +1,5 @@
 <x-app-layout>
-    <p>Hello world</p>
+    <div class="container bg-success">
+</br></br></br>
+    </div>
 </x-app-layout>
