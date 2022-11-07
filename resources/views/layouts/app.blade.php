@@ -13,21 +13,20 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body>
-        <div class="container-fluid bg-primary shadow p-3 mb-3">
-            <div class="container">
-                <div class="row">
-                    <div class="col-2 bg-warning my-auto">
-                        <h1 class="text-white">Kalender App</h1>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+            @include('layouts.navigation')
+
+            <!-- Page Heading -->
+            @if (isset($header))
+                <header class="bg-white shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
                     </div>
-                    <div class="col bg-success">
-                        <button href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-light ml-auto">Logout</button> 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
-                    </div>
-                </div>
-            </div>
-        </div>          
-        <div class="min-h-screen bg-gray-100"> 
+                </header>
+            @endif
+
+            <!-- Page Content -->
             <main>
                 {{ $slot }}
             </main>
