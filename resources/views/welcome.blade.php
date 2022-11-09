@@ -1,4 +1,7 @@
+<?php 
 
+
+?>
 <x-app-layout>
     <style>
         .calendarGridParent {
@@ -92,6 +95,74 @@
                 <div class="prev-day">4</div>
             </div>
         </div>
+        <label for="startDate">Start date:</label>
+        <input type="date" id="startDate" name="startDate" onchange="checkDate('start')"></br>
+
+        <label for="endDate">End date:</label>
+        <input type="date" id="endDate" name="endDate" onchange="checkDate('end')"></br> 
+
+        <label for="titleInput">Title:</lavel>
+        <input type="text" id="titleInput" name="titleInput"></br>
+
+        <label for="startTime">Start Time:</label>
+        <input type="time" id="startTime" name="startTime" value="00:00" onchange="checkTime('start')"></br>
+
+        <label for="endTime">End Time:</label>
+        <input type="time" id="endTime" name="endTime" value="00:00" onchange="checkTime('end')"></br>
     </div>
+
+    <script>
+        const startDateElement = document.querySelector("#startDate");
+        const endDateElement = document.querySelector("#endDate");
+        const startTimeElement = document.querySelector("#startTime");
+        const endTimeElement = document.querySelector("#endTime");
+
+        startDateElement.value = getCurrentDate();
+        startDateElement.min = getCurrentDate();
+        startDateElement.max = getMaxDate();
+        endDateElement.value = startDateElement.value;
+        endDateElement.min = startDateElement.value;
+        endDateElement.max = startDateElement.max;
+
+        function getCurrentDate(){
+            let currentDate = new Date().toISOString();
+            let currentDateArray = currentDate.split("T");
+            return currentDateArray[0]; 
+        }
+        function getMaxDate(){
+            let date = new Date();
+            let dateInThreeYears = new Date(date.setFullYear(date.getFullYear() + 3));
+            let dateArray = dateInThreeYears.toISOString().split("T");
+            return dateArray[0];
+        }
+        function checkDate(switchDateDirection){
+            let startDate = new Date(startDateElement.value).valueOf();
+            let endDate = new Date(endDateElement.value).valueOf();
+            if (startDate > endDate){
+                if(switchDateDirection == "start"){
+                    endDateElement.value = startDateElement.value;
+                } else {
+                    startDateElement.value = endDateElement.value;
+                }
+            }
+        }
+        function checkTime(switchTimeDirection){
+            let startDate = new Date(startDateElement.value).valueOf();
+            let endDate = new Date(endDateElement.value).valueOf();
+            let startTime = startTimeElement.value.split(":");
+            let endTime = endTimeElement.value.split(":");
+            if (startDate == endDate){
+                if((startTime[0] > endTime[0]) || (startTime[0] = endTime[0] && startTime[1] > endTime[1])){
+                    if(switchTimeDirection == "start"){
+                        endTimeElement.value = startTimeElement.value;
+                    } else {
+                        startTimeElement.value = endTimeElement.value;
+                    }
+                    
+                }
+            }
+        }
+
+    </script>
     
 </x-app-layout>
