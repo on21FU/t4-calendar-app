@@ -8,5 +8,5 @@ console.log("hallo");
 
 window.Alpine = Alpine;
 
-
 Alpine.start();
+

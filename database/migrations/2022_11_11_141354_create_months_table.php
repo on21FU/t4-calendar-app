@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('appointment', function (Blueprint $table) {
+        Schema::create('months', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
-            $table->string('titel');
-            $table->date('date');
-            $table->dateTime('startTime');
-            $table->dateTime('endTime');
-            $table->foreign('userID')->references('id')->on('users');
+            $table->integer('year');
+            $table->string('name');
+            $table->string('startDay');
+            $table->integer('maxDays');
         });
     }
 
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('termine');
+        Schema::dropIfExists('months');
     }
 };
