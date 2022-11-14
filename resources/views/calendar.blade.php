@@ -34,29 +34,41 @@ function convertDayToNumb($day){
     }
 }
 function findActualMonthIndex($monat, $jahr, $monthsData){
-    $index = array_search($jahr, $monthsData->year);
-    debug_to_console($index);
+    foreach ($monthsData as $key => $value) {
+        if($value["name"]==$monat && $value["year"]==$jahr){
+            return $key;
+        }
+    }
+    
 
+}
+function convertArrayToJson($data){
+    $newJson = json_decode($data, true);
+    return $newJson;
 }
 
 function createCalendarArray($monthsData){
-    $monat = "november";
+    $monat = "december";
     $jahr = 2022;
-
     $actualMonthIndex = findActualMonthIndex($monat, $jahr, $monthsData);
-    $prevMonthIndex;
-    $nextMonthIndex;
+    $actualMonth = $monthsData[$actualMonthIndex];
+    $prevMonth = $monthsData[$actualMonthIndex-1];
+    $nextMonth = $monthsData[$actualMonthIndex+1];
+
 
     $calendarArray = array("<div class='weekday'>Mon</div>","<div class='weekday'>Tue</div>","<div class='weekday'>Wed</div>","<div class='weekday'>Thu</div>","<div class='weekday'>Fri</div>","<div class='weekday'>Sat</div>","<div class='weekday'>Sun</div>");
     
-    /*$stopper = convertDayToNumb($monthsData[0]->startDay);
+
+
+    $stopper = convertDayToNumb($actualMonth["startDay"]);
     
     for ($i=1; $i < $stopper; $i++) {   //füllt Array bis zum 1. mit den Zahlen vom vorherigen Monat auf
         $calendarArray []="<div class='prev-day'>p</div>";
     }
-    $calendarArray []= "<div>1</div>";*/
-    //debug_to_console($monthsData);
-    
+    for ($i=1; $i <= $actualMonth["maxDays"]; $i++) {  //füllt Array von 1-maxDays
+        $calendarArray []= "<div>".$i."</div>";
+    }
+      
 
     return $calendarArray;
 }
@@ -119,8 +131,7 @@ function importCalendar($monthsData){
         </div>
         <div class="row justify-content-center">
             <div class="col-3 text-center calendarGridParent">
-                <?php importCalendar($monthsData);?>
-                
+                <?php importCalendar(convertArrayToJson($monthsData));?>                
             </div>
         </div>
         <label for="startDate">Start date:</label>
