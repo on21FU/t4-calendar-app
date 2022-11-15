@@ -1,5 +1,8 @@
 <?php 
 
+$selectedMonth = "july";
+$selectedYear = 2023;
+
 function debug_to_console($dataToConsole) {
     $output = $dataToConsole;
     if (is_array($output))
@@ -38,19 +41,16 @@ function findActualMonthIndex($monat, $jahr, $monthsData){
         if($value["name"]==$monat && $value["year"]==$jahr){
             return $key;
         }
-    }
-    
-
+    } 
 }
 function convertArrayToJson($data){
     $newJson = json_decode($data, true);
     return $newJson;
 }
 
-function createCalendarArray($monthsData){
-    $monat = "december";
-    $jahr = 2022;
-    $actualMonthIndex = findActualMonthIndex($monat, $jahr, $monthsData);
+function createCalendarArray($monthsData, $selectedMonth, $selectedYear){
+    
+    $actualMonthIndex = findActualMonthIndex($selectedMonth, $selectedYear, $monthsData);
     $actualMonth = $monthsData[$actualMonthIndex];
     $prevMonth = $monthsData[$actualMonthIndex-1];
     $nextMonth = $monthsData[$actualMonthIndex+1];
@@ -63,18 +63,22 @@ function createCalendarArray($monthsData){
     $stopper = convertDayToNumb($actualMonth["startDay"]);
     
     for ($i=1; $i < $stopper; $i++) {   //füllt Array bis zum 1. mit den Zahlen vom vorherigen Monat auf
-        $calendarArray []="<div class='prev-day'>p</div>";
+        $calendarArray []="<div class='prev-day'>".$prevMonth["maxDays"]-$stopper+$i+"1"."</div>";
     }
     for ($i=1; $i <= $actualMonth["maxDays"]; $i++) {  //füllt Array von 1-maxDays
         $calendarArray []= "<div>".$i."</div>";
     }
+    $iteration = 1;
+    while((count($calendarArray)%7)!=0){
+        $calendarArray []= "<div class='prev-day'>".$iteration."</div>"; 
+        $iteration++;
+    }
       
-
     return $calendarArray;
 }
 
-function importCalendar($monthsData){
-    $calendarArray = createCalendarArray($monthsData);
+function importCalendar($monthsData, $selectedMonth, $selectedYear){
+    $calendarArray = createCalendarArray($monthsData, $selectedMonth, $selectedYear);
     $calendar = "";
     foreach ($calendarArray as $day) {
         $calendar = $calendar.$day;
@@ -109,7 +113,7 @@ function importCalendar($monthsData){
     </style>
     <div class="container mt-5">
         <div class="row">
-            <select name="selectMonth" id="selectMonth">
+            <select name="selectMonth" id="selectMonth" onchange="load_new_content()">
                 <option value="january">January</option>
                 <option value="february">February</option>
                 <option value="march">March</option>
@@ -122,16 +126,16 @@ function importCalendar($monthsData){
                 <option value="november">November</option>
                 <option value="dezember">Dezember</option>
             </select>
-            <select name="selectYear" id="selectYear">
+            <select name="selectYear" id="selectYear" select="2023">
                 <option value="2022">2022</option>
                 <option value="2023">2023</option>
-                <option value="2024">2024</option>
+                <option value="2024" selected="selected">2024</option>
                 <option value="2025">2025</option>
             </select>
         </div>
         <div class="row justify-content-center">
             <div class="col-3 text-center calendarGridParent">
-                <?php importCalendar(convertArrayToJson($monthsData));?>                
+                <?php importCalendar(convertArrayToJson($monthsData), $selectedMonth, $selectedYear);?>                
             </div>
         </div>
         <label for="startDate">Start date:</label>
@@ -148,8 +152,7 @@ function importCalendar($monthsData){
 
         <label for="endTime">End Time:</label>
         <input type="time" id="endTime" name="endTime" value="00:00" onchange="checkTime('end')"></br>
-    </div>
-
+    </div> 
     <script>
         const startDateElement = document.querySelector("#startDate");
         const endDateElement = document.querySelector("#endDate");
@@ -200,7 +203,16 @@ function importCalendar($monthsData){
                 }
             }
         }
-
+        function load_new_content(){
+            var selected_option_value=$("#select1 option:selected").val(); //get the value of the current selected option.
+            $.post("calendar", {option_value: selected_option_value},
+                function(data){ //this will be executed once the `script_that_receives_value.php` ends its execution, `data` contains everything said script echoed.
+                    $("#place_where_you_want_the_new_html").html(data);
+                    alert(data); //just to see what it returns
+                }
+            );
+        }
     </script>
+
     
 </x-app-layout>
