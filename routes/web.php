@@ -22,7 +22,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
 Route::get('calendar', [monthController::class, 'index']);
+Route::post('loadInputData', [monthController::class, 'loadThings']);
+
 
 
 require __DIR__.'/auth.php';

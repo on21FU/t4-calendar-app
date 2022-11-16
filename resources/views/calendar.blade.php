@@ -1,7 +1,18 @@
 <?php 
 
-$selectedMonth = "july";
-$selectedYear = 2023;
+$selectedMonth = "november";
+$selectedYear = 2022;
+
+$selectedDate = array("november", 2022);
+
+function updateSelectedDate($selectedDate){
+    $selectedMonth = $selectedDate[0];
+    $selectedYear = $selectedDate[1];
+}
+
+function takeCalendarInput(Request $req){
+    debug_to_console($req->input());
+}
 
 function debug_to_console($dataToConsole) {
     $output = $dataToConsole;
@@ -113,25 +124,30 @@ function importCalendar($monthsData, $selectedMonth, $selectedYear){
     </style>
     <div class="container mt-5">
         <div class="row">
-            <select name="selectMonth" id="selectMonth" onchange="load_new_content()">
-                <option value="january">January</option>
-                <option value="february">February</option>
-                <option value="march">March</option>
-                <option value="april">April</option>
-                <option value="may">May</option>
-                <option value="june">June</option>
-                <option value="july">July</option>
-                <option value="september">September</option>
-                <option value="oktober">Oktober</option>
-                <option value="november">November</option>
-                <option value="dezember">Dezember</option>
-            </select>
-            <select name="selectYear" id="selectYear" select="2023">
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024" selected="selected">2024</option>
-                <option value="2025">2025</option>
-            </select>
+            <form action="loadInputData" method="POST">
+                @csrf
+                <select name="selectMonth" id="selectMonth">
+                    <option value="january">January</option>
+                    <option value="february">February</option>
+                    <option value="march">March</option>
+                    <option value="april">April</option>
+                    <option value="may">May</option>
+                    <option value="june">June</option>
+                    <option value="july">July</option>
+                    <option value="september">September</option>
+                    <option value="oktober">Oktober</option>
+                    <option value="november">November</option>
+                    <option value="dezember">Dezember</option>
+                </select>
+                <select name="selectYear" id="selectYear">
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024" selected="selected">2024</option>
+                    <option value="2025">2025</option>
+                </select>
+                <button type="submit" onclick="document.write('<?php updateSelectedDate($selectedDate);?>');">Submit</button>
+            </form>
+
         </div>
         <div class="row justify-content-center">
             <div class="col-3 text-center calendarGridParent">
@@ -153,7 +169,35 @@ function importCalendar($monthsData, $selectedMonth, $selectedYear){
         <label for="endTime">End Time:</label>
         <input type="time" id="endTime" name="endTime" value="00:00" onchange="checkTime('end')"></br>
     </div> 
+
+
+
+
+
+
+
     <script>
+        $.ajaxSetup({
+            beforeSend: function(xhr, type) {
+                if (!type.crossDomain) {
+                    xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+                }
+            },
+        });
+        /*function loadNewContent(){
+           $.ajax({
+            type:'get',
+            url: '{{URL::to('loadInputData')}}', 
+            data:{'newSelectedMonth':$("#selectMonth option:selected").val(), 'newSelectedYear':$("#selectYear option:selected").val()},
+            success:function(data){
+                console.log(data);
+                return(data);
+            }
+            });
+        }*/
+
+
+
         const startDateElement = document.querySelector("#startDate");
         const endDateElement = document.querySelector("#endDate");
         const startTimeElement = document.querySelector("#startTime");
@@ -202,15 +246,6 @@ function importCalendar($monthsData, $selectedMonth, $selectedYear){
                     }
                 }
             }
-        }
-        function load_new_content(){
-            var selected_option_value=$("#select1 option:selected").val(); //get the value of the current selected option.
-            $.post("calendar", {option_value: selected_option_value},
-                function(data){ //this will be executed once the `script_that_receives_value.php` ends its execution, `data` contains everything said script echoed.
-                    $("#place_where_you_want_the_new_html").html(data);
-                    alert(data); //just to see what it returns
-                }
-            );
         }
     </script>
 
