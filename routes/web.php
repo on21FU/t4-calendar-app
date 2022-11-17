@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\monthController;
+use App\Http\Controllers\AppointmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,10 @@ Route::get('/dashboard', function () {
 
 Route::get('calendar', [monthController::class, 'index']);
 Route::post('loadInputData', [monthController::class, 'loadThings']);
+
+Route::get('listAppointments', [AppointmentController::class, 'index'])->name('listAppointments');
+Route::get('addAppointment', [AppointmentController::class, 'addAppointment'])->name('addAppointment');
+Route::post('saveAppointment', [AppointmentController::class, 'saveAppointment'])->name('saveAppointment');
 
 
 
