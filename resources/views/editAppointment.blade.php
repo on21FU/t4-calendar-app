@@ -2,22 +2,23 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h2 class="h2">Add Appointment</h2>
-                <form method="post" action="saveAppointment">
+                <h2 class="h2">Edit Appointment</h2>
+                <form method="post" action="{{url('updateAppointment')}}">
                     @csrf
+                    <input type="hidden" name="id" value="{{$data->id}}" required>
                     <label for="dateInput">Date:</label>
-                    <input type="date" id="dateInput" name="dateInput" required></br>
+                    <input type="date" id="dateInput" name="dateInput" required value="{{$data->date}}"></br>
     
                     <label for="titleInput">Title:</lavel>
-                    <input type="text" id="titleInput" name="titleInput" required></br>
+                    <input type="text" id="titleInput" name="titleInput" required value="{{$data->title}}"></br>
     
                     <label for="startTimeInput">Start Time:</label>
-                    <input type="time" id="startTimeInput" name="startTimeInput" value="00:00" onchange="checkTime('start')" required></br>
+                    <input type="time" id="startTimeInput" name="startTimeInput" value="{{$data->startTime}}" onchange="checkTime('start')" required></br>
     
                     <label for="endTimeInput">End Time:</label>
-                    <input type="time" id="endTimeInput" name="endTimeInput" value="00:00" onchange="checkTime('end')" required></br>      
+                    <input type="time" id="endTimeInput" name="endTimeInput" value="{{$data->endTime}}" onchange="checkTime('end')" required></br>      
                     
-                    <button class="btn btn-primary" type="submit">Create</button>
+                    <button class="btn btn-primary" type="submit">Save</button>
                     <a href="listAppointments" class="btn btn-danger">Back</a>
                 </form>
 

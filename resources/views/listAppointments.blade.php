@@ -8,8 +8,8 @@
                     {{Session::get('success')}}
                 </div>
                 @endif
-                <div class="btn btn-primary" style="float: right;">
-                    <a href="addAppointment">Add</a>
+                <div style="float: right;">
+                    <a href="addAppointment" class="btn btn-primary">Add</a>
                 </div>
                 <table class="table">
                     <thead>
@@ -32,7 +32,7 @@
                                 <td>{{$item->startTime}}</td>
                                 <td>{{$item->endTime}}</td>
                                 <td>{{$item->userId}}</td>
-                                <td>Edit | Delete</td>
+                                <td><a href="{{url('editAppointment/'.$item->id)}}" class="btn btn-primary">Edit</a> | <a href="{{url('deleteAppointment/'.$item->id)}}" class="btn btn-danger">Delete</a></td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -30,6 +30,9 @@ Route::post('loadInputData', [monthController::class, 'loadThings']);
 Route::get('listAppointments', [AppointmentController::class, 'index'])->name('listAppointments');
 Route::get('addAppointment', [AppointmentController::class, 'addAppointment'])->name('addAppointment');
 Route::post('saveAppointment', [AppointmentController::class, 'saveAppointment'])->name('saveAppointment');
+Route::get('editAppointment/{id}', [AppointmentController::class, 'editAppointment'])->name('editAppointment');
+Route::post('updateAppointment', [AppointmentController::class, 'updateAppointment'])->name('updateAppointment');
+Route::get('deleteAppointment/{id}', [AppointmentController::class, 'deleteAppointment'])->name('deleteAppointment');
 
 
 
