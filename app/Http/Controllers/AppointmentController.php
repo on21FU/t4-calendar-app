@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Appointment;
+use App\Models\Month;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class AppointmentController extends Controller
 {
     public function index(){
+        $monthsData = Month::all();
         $user = Auth::user();
-        $data = DB::table('appointments')->where('userId', '=', $user->id)->get();
-        return view('listAppointments', compact('data'));
+        $appointmentData = DB::table('appointments')->where('userId', '=', $user->id)->get();
+        $allData = array($monthsData, $appointmentData);
+        
+        return view('listAppointments', compact('allData'));
     }
     public function addAppointment(){
         return view('addAppointment');
@@ -34,7 +39,7 @@ class AppointmentController extends Controller
                     "userId" => $user->id
                 ]);
 
-        return redirect()->route("listAppointments")->with("success", "Appointment created Successfully");
+        return redirect()->route("listAppointments");
     }
     public function editAppointment($id){
         $data = Appointment::where('id', '=', $id)->first();
@@ -53,11 +58,21 @@ class AppointmentController extends Controller
             'startTime'=>$startTime,
             'endTime'=>$endTime
         ]);
-        return redirect()->route("listAppointments")->with("success", "Appointment updated Successfully");
+        return redirect()->route("listAppointments");
     }
     public function deleteAppointment($id){
         Appointment::where('id', '=', $id)->delete();
-        return redirect()->route("listAppointments")->with("success", "Appointment deleted Successfully");
+        return redirect()->route("listAppointments");
+    }
+    public function getAppointmentsByDate(Request $request){
+        $appointments = Appointment::where('date', '=', $request->date)->get();
+        return response($appointments);
+    }
+    public function loadInputData(Request $request){
+        $selectedYear = $request->selectYear;
+        $selectedMonth = $request->selectMonth;
+        $selectedInput [] = array($selectedMonth, $selectedYear);
+        return redirect()->route("listAppointments", compact('selectedInput'));
     }
 
 }

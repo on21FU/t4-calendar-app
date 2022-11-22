@@ -19,7 +19,7 @@
                     <input type="time" id="endTimeInput" name="endTimeInput" value="{{$data->endTime}}" onchange="checkTime('end')" required></br>      
                     
                     <button class="btn btn-primary" type="submit">Save</button>
-                    <a href="listAppointments" class="btn btn-danger">Back</a>
+                    <a href="{{url("listAppointments")}}" class="btn btn-danger">Back</a>
                 </form>
 
             </div>

@@ -33,6 +33,8 @@ Route::post('saveAppointment', [AppointmentController::class, 'saveAppointment']
 Route::get('editAppointment/{id}', [AppointmentController::class, 'editAppointment'])->name('editAppointment');
 Route::post('updateAppointment', [AppointmentController::class, 'updateAppointment'])->name('updateAppointment');
 Route::get('deleteAppointment/{id}', [AppointmentController::class, 'deleteAppointment'])->name('deleteAppointment');
+Route::get('get-appointments-bydate', [AppointmentController::class, 'getAppointmentsByDate'])->name('get-appointments-bydate');
+Route::post('loadInputData', [AppointmentController::class, 'loadInputData'])->name('loadInputData');
 
 
 
