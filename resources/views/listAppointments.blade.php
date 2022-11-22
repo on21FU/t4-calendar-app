@@ -6,7 +6,14 @@ $monthsData = $allData[0];
 $selectedMonth = 'november';
 $selectedYear = 2022;
 
-
+function changeInput(){
+    global $selectedMonth;
+    global $selectedYear;
+    if(isset($_POST['selectMonth'])){
+        $selectedMonth = $_POST['selectMonth'];
+        $selectedYear = $_POST['selectYear'];
+    };
+}
 
 function takeCalendarInput(Request $req)
 {
@@ -217,9 +224,9 @@ function openAppointmentInfo()
             font-weight: bold;
         }
     </style>
-    <div class="container mt-5">
+    <div class="container mt-5" id="test">
         <div class="d-flex justify-content-center">
-            <form action="loadInputData" method="POST">
+            <form action="" method="POST">
                 @csrf
                 <select name="selectMonth" id="selectMonth">
                     <option value="january">January</option>
@@ -230,9 +237,9 @@ function openAppointmentInfo()
                     <option value="june">June</option>
                     <option value="july">July</option>
                     <option value="september">September</option>
-                    <option value="oktober">Oktober</option>
+                    <option value="october">Oktober</option>
                     <option value="november">November</option>
-                    <option value="dezember">Dezember</option>
+                    <option value="december">Dezember</option>
                 </select>
                 <select name="selectYear" id="selectYear">
                     <option value="2022">2022</option>
@@ -240,7 +247,7 @@ function openAppointmentInfo()
                     <option value="2024" selected="selected">2024</option>
                     <option value="2025">2025</option>
                 </select>
-                <button type="submit">Monat anzeigen</button>
+                <button type="submit" click="changeSelectedInput()">Show Month</button>
             </form>
         </div>
         <div class="d-flex justify-content-center">
@@ -325,6 +332,7 @@ function openAppointmentInfo()
         const dateElement = document.querySelector("#dateInput");
         const startTimeElement = document.querySelector("#startTimeInput");
         const endTimeElement = document.querySelector("#endTimeInput");
+        const test = document.querySelector("#test");
 
         dateElement.value = getCurrentDate();
         dateElement.min = getCurrentDate();
@@ -389,6 +397,9 @@ function openAppointmentInfo()
             appointmentInfo.innerHTML=appointments.map((appointment)=>{
                 return "<li class='mt-3'><p id='title'>"+appointment.title+"</p><p id='date'>"+appointment.date+"</p><p id='startTime'>"+appointment.startTime+"</p><p id='endTime'>"+appointment.endTime+"</p><a href='{{ url('editAppointment/' . $item->id) }}' class='btn btn-primary'>Edit</a><a href='{{ url('deleteAppointment/' . $item->id) }}' class='btn btn-danger'>Delete</a></li>";
             });
+        }
+        function changeSelectedInput(){
+            test.innerText = "<?php changeInput()?>";
         }
         </script>
 </x-app-layout>

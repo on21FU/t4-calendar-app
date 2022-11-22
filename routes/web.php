@@ -28,6 +28,7 @@ Route::get('calendar', [monthController::class, 'index']);
 Route::post('loadInputData', [monthController::class, 'loadThings']);
 
 Route::get('listAppointments', [AppointmentController::class, 'index'])->name('listAppointments');
+Route::post('listAppointments', [AppointmentController::class, 'index'])->name('listAppointments');
 Route::get('addAppointment', [AppointmentController::class, 'addAppointment'])->name('addAppointment');
 Route::post('saveAppointment', [AppointmentController::class, 'saveAppointment'])->name('saveAppointment');
 Route::get('editAppointment/{id}', [AppointmentController::class, 'editAppointment'])->name('editAppointment');
