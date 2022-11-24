@@ -109,6 +109,7 @@ function createCalendarArray($monthsData, $selectedMonth, $selectedYear, $data)
     $prevMonth = $monthsData[$actualMonthIndex - 1];
     $nextMonth = $monthsData[$actualMonthIndex + 1];
 
+
     $calendarArray = ["<div class='weekday'>Mon</div>", "<div class='weekday'>Tue</div>", "<div class='weekday'>Wed</div>", "<div class='weekday'>Thu</div>", "<div class='weekday'>Fri</div>", "<div class='weekday'>Sat</div>", "<div class='weekday'>Sun</div>"];
 
     $stopper = convertDayToNumb($actualMonth['startDay']);
@@ -126,10 +127,18 @@ function createCalendarArray($monthsData, $selectedMonth, $selectedYear, $data)
                 $appointmentMarker = "</br><p class='point' id='" . $i . "'>·</p>";
             }
         }
-        if ($appointmentMarker == '') {
-            $calendarArray[] = "<div class='normalDay'><span>" . sprintf('%02d', $i) . $appointmentMarker . '</span></div>';
-        } else {
-            $calendarArray[] = "<div class='normalDay hasAppointment' id='" . $i . "'><p id='" . $i . "'>" . sprintf('%02d', $i) . '</p>' . $appointmentMarker . '</div>';
+        if ($appointmentMarker == '') { //der aktuell ausgewählte Tag hat keinen Termin
+            if($selectedDate == date("Y-m-d")){
+                $calendarArray[] = "<div class='normalDay currentDay'><span>" . sprintf('%02d', $i) . $appointmentMarker . '</span></div>';
+            } else {
+                $calendarArray[] = "<div class='normalDay'><span>" . sprintf('%02d', $i) . $appointmentMarker . '</span></div>';
+            }
+        } else { //der aktuell ausgewählte Tag hat einen Termin
+            if($selectedDate == date("Y-m-d")){
+                $calendarArray[] = "<div class='normalDay hasAppointment currentDay' id='" . $i . "'><p id='" . $i . "'>" . sprintf('%02d', $i) . '</p>' . $appointmentMarker . '</div>';
+            } else {
+                $calendarArray[] = "<div class='normalDay hasAppointment' id='" . $i . "'><p id='" . $i . "'>" . sprintf('%02d', $i) . '</p>' . $appointmentMarker . '</div>';
+            }
         }
     }
     $iteration = 1;
@@ -206,6 +215,10 @@ function openAppointmentInfo()
 
         .normalDay span {
             user-select: none;
+        }
+
+        .currentDay {
+            background-color: rgba(8, 214, 214, 0.3) !important;
         }
 
         #insertAppointmentInfo p {

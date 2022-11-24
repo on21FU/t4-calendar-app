@@ -25,8 +25,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::get('calendar', [monthController::class, 'index']);
-Route::post('loadInputData', [monthController::class, 'loadThings']);
 
 Route::get('listAppointments', [AppointmentController::class, 'index'])->name('listAppointments');
 Route::post('listAppointments', [AppointmentController::class, 'index'])->name('listAppointments');
