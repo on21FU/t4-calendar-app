@@ -17,7 +17,7 @@ use App\Http\Controllers\MonthSelectionController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('listAppointments');
 })->middleware(['auth', 'verified'])->name('/');
 
 Route::get('/dashboard', function () {
@@ -26,18 +26,18 @@ Route::get('/dashboard', function () {
 
 
 
-Route::get('listAppointments', [AppointmentController::class, 'index'])->name('listAppointments');
-Route::post('listAppointments', [AppointmentController::class, 'index'])->name('listAppointments');
-Route::get('addAppointment', [AppointmentController::class, 'addAppointment'])->name('addAppointment');
-Route::post('saveAppointment', [AppointmentController::class, 'saveAppointment'])->name('saveAppointment');
-Route::get('editAppointment/{id}', [AppointmentController::class, 'editAppointment'])->name('editAppointment');
-Route::post('updateAppointment', [AppointmentController::class, 'updateAppointment'])->name('updateAppointment');
-Route::get('deleteAppointment/{id}', [AppointmentController::class, 'deleteAppointment'])->name('deleteAppointment');
-Route::get('get-appointments-bydate', [AppointmentController::class, 'getAppointmentsByDate'])->name('get-appointments-bydate');
+Route::get('listAppointments', [AppointmentController::class, 'index'])->middleware(['auth', 'verified'])->name('listAppointments');
+Route::post('listAppointments', [AppointmentController::class, 'index'])->middleware(['auth', 'verified'])->name('listAppointments');
+Route::get('addAppointment', [AppointmentController::class, 'addAppointment'])->middleware(['auth', 'verified'])->name('addAppointment');
+Route::post('saveAppointment', [AppointmentController::class, 'saveAppointment'])->middleware(['auth', 'verified'])->name('saveAppointment');
+Route::get('editAppointment/{id}', [AppointmentController::class, 'editAppointment'])->middleware(['auth', 'verified'])->name('editAppointment');
+Route::post('updateAppointment', [AppointmentController::class, 'updateAppointment'])->middleware(['auth', 'verified'])->name('updateAppointment');
+Route::get('deleteAppointment/{id}', [AppointmentController::class, 'deleteAppointment'])->middleware(['auth', 'verified'])->name('deleteAppointment');
+Route::get('get-appointments-bydate', [AppointmentController::class, 'getAppointmentsByDate'])->middleware(['auth', 'verified'])->name('get-appointments-bydate');
 
-Route::post('inputSelectedMonth', [MonthSelectionController::class, 'inputSelectedMonth'])->name('inputSelectedMonth');
-Route::post('inputSelectedYear', [MonthSelectionController::class, 'inputSelectedYear'])->name('inputSelectedYear');
-Route::get('getLastSelection', [MonthSelectionController::class, 'getLastSelection'])->name('getLastSelection');
+Route::post('inputSelectedMonth', [MonthSelectionController::class, 'inputSelectedMonth'])->middleware(['auth', 'verified'])->name('inputSelectedMonth');
+Route::post('inputSelectedYear', [MonthSelectionController::class, 'inputSelectedYear'])->middleware(['auth', 'verified'])->name('inputSelectedYear');
+Route::get('getLastSelection', [MonthSelectionController::class, 'getLastSelection'])->middleware(['auth', 'verified'])->name('getLastSelection');
 
 
 

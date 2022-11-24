@@ -1,8 +1,4 @@
 <?php
-/*if(!(isset($_COOKIE["cookieMonth"]))){
-    setcookie("cookieMonth", 'november');
-    setcookie("cookieYear", 2022);
-}*/
 
 $data = $allData[1];
 $monthsData = $allData[0];
@@ -270,8 +266,8 @@ function openAppointmentInfo()
             echo "<div class='d-none'><p id='selectedMonth'>$selectedMonthNumb</p><p id='selectedYear'>$selectedYear</p></div>";
         @endphp
 
-        <div class="row">
-            <div class="col-12">
+        <div class="d-flex justify-content-center mt-3">
+            <div class="">
                 <h2 class="h2">Add Appointment</h2>
                 <form method="post" action="saveAppointment">
                     @csrf
