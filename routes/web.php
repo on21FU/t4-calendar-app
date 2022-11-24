@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\monthController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\MonthSelectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,10 @@ Route::get('editAppointment/{id}', [AppointmentController::class, 'editAppointme
 Route::post('updateAppointment', [AppointmentController::class, 'updateAppointment'])->name('updateAppointment');
 Route::get('deleteAppointment/{id}', [AppointmentController::class, 'deleteAppointment'])->name('deleteAppointment');
 Route::get('get-appointments-bydate', [AppointmentController::class, 'getAppointmentsByDate'])->name('get-appointments-bydate');
-Route::post('loadInputData', [AppointmentController::class, 'loadInputData'])->name('loadInputData');
+
+Route::post('inputSelectedMonth', [MonthSelectionController::class, 'inputSelectedMonth'])->name('inputSelectedMonth');
+Route::post('inputSelectedYear', [MonthSelectionController::class, 'inputSelectedYear'])->name('inputSelectedYear');
+Route::get('getLastSelection', [MonthSelectionController::class, 'getLastSelection'])->name('getLastSelection');
 
 
 

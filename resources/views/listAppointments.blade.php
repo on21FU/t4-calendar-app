@@ -1,24 +1,15 @@
 <?php
+/*if(!(isset($_COOKIE["cookieMonth"]))){
+    setcookie("cookieMonth", 'november');
+    setcookie("cookieYear", 2022);
+}*/
+
 $data = $allData[1];
 $monthsData = $allData[0];
 
+$selectedMonth = $allData[2];
+$selectedYear = $allData[3];
 
-$selectedMonth = 'november';
-$selectedYear = 2022;
-
-function changeInput(){
-    global $selectedMonth;
-    global $selectedYear;
-    if(isset($_POST['selectMonth'])){
-        $selectedMonth = $_POST['selectMonth'];
-        $selectedYear = $_POST['selectYear'];
-    };
-}
-
-function takeCalendarInput(Request $req)
-{
-    debug_to_console($req->input());
-}
 
 function debug_to_console($dataToConsole)
 {
@@ -216,19 +207,21 @@ function openAppointmentInfo()
         .normalDay span {
             user-select: none;
         }
-        #insertAppointmentInfo p{
+
+        #insertAppointmentInfo p {
             display: inline-block;
             margin-right: 10px;
         }
-        #insertAppointmentInfo #title{
+
+        #insertAppointmentInfo #title {
             font-weight: bold;
         }
     </style>
-    <div class="container mt-5" id="test">
+    <div class="container mt-5">
         <div class="d-flex justify-content-center">
             <form action="" method="POST">
                 @csrf
-                <select name="selectMonth" id="selectMonth">
+                <select name="selectMonth" id="selectMonth" onchange="reload()">
                     <option value="january">January</option>
                     <option value="february">February</option>
                     <option value="march">March</option>
@@ -241,13 +234,12 @@ function openAppointmentInfo()
                     <option value="november">November</option>
                     <option value="december">Dezember</option>
                 </select>
-                <select name="selectYear" id="selectYear">
+                <select name="selectYear" id="selectYear" onchange="reload()">
                     <option value="2022">2022</option>
                     <option value="2023">2023</option>
-                    <option value="2024" selected="selected">2024</option>
+                    <option value="2024">2024</option>
                     <option value="2025">2025</option>
                 </select>
-                <button type="submit" click="changeSelectedInput()">Show Month</button>
             </form>
         </div>
         <div class="d-flex justify-content-center">
@@ -264,44 +256,7 @@ function openAppointmentInfo()
             $selectedMonthNumb = convertMonthToNumb($selectedMonth);
             echo "<div class='d-none'><p id='selectedMonth'>$selectedMonthNumb</p><p id='selectedYear'>$selectedYear</p></div>";
         @endphp
-        <!--<div class="row">
-            <div class="col-12">
-                <h2 class="h2">Appointment List</h2>
-                @if (Session::has('success'))
-                    <div class="alert alert-success" role="alert">
-                        {{ Session::get('success') }}
-                    </div>
-                @endif
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Titel</th>
-                            <th>Datum</th>
-                            <th>Start Uhrzeit</th>
-                            <th>End Uhrzeit</th>
-                            <th>User ID</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($data as $item)
-                            <tr>
-                                <td>{{ $item->id }}</td>
-                                <td>{{ $item->title }}</td>
-                                <td>{{ $item->date }}</td>
-                                <td>{{ $item->startTime }}</td>
-                                <td>{{ $item->endTime }}</td>
-                                <td>{{ $item->userId }}</td>
-                                <td><a href="{{ url('editAppointment/' . $item->id) }}" class="btn btn-primary">Edit</a><a
-                                        href="{{ url('deleteAppointment/' . $item->id) }}"
-                                        class="btn btn-danger">Delete</a></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>-->
+
         <div class="row">
             <div class="col-12">
                 <h2 class="h2">Add Appointment</h2>
@@ -331,8 +286,40 @@ function openAppointmentInfo()
     <script>
         const dateElement = document.querySelector("#dateInput");
         const startTimeElement = document.querySelector("#startTimeInput");
-        const endTimeElement = document.querySelector("#endTimeInput");
-        const test = document.querySelector("#test");
+        const endTimeElement = document.querySelector("#endTimeInput")
+
+        const optionMonths = document.querySelectorAll('#selectMonth option');
+        const optionYears = document.querySelectorAll('#selectYear option');
+
+        preselectInput();
+        function preselectInput(){
+            $.ajax({
+                type: "GET",
+                url: 'getLastSelection',
+                success: function(response) {
+                    preMonth(response[0].month);
+                    preYear(response[0].year);
+                }
+            })
+        }
+        function preMonth(month){
+            optionMonths.forEach(option => {
+                if(option.value == month){
+                    option.setAttribute("selected", "selected");
+                }
+            });
+        }
+        function preYear(year){
+            optionYears.forEach(option => {
+                if(option.value == year){
+                    option.setAttribute("selected", "selected");
+                }
+            });
+        }
+
+
+
+
 
         dateElement.value = getCurrentDate();
         dateElement.min = getCurrentDate();
@@ -389,17 +376,65 @@ function openAppointmentInfo()
                 },
                 success: function(response) {
                     displaySelectedAppointments(response);
-                    
+
                 }
             })
         }
-        function displaySelectedAppointments(appointments){                
-            appointmentInfo.innerHTML=appointments.map((appointment)=>{
-                return "<li class='mt-3'><p id='title'>"+appointment.title+"</p><p id='date'>"+appointment.date+"</p><p id='startTime'>"+appointment.startTime+"</p><p id='endTime'>"+appointment.endTime+"</p><a href='{{ url('editAppointment/' . $item->id) }}' class='btn btn-primary'>Edit</a><a href='{{ url('deleteAppointment/' . $item->id) }}' class='btn btn-danger'>Delete</a></li>";
+
+        function displaySelectedAppointments(appointments) {
+            appointmentInfo.innerHTML = appointments.map((appointment) => {
+                return "<li class='mt-3'><p id='title'>" + appointment.title + "</p><p id='date'>" + appointment
+                    .date + "</p><p id='startTime'>" + appointment.startTime + "</p><p id='endTime'>" + appointment
+                    .endTime +
+                    `</p><a href='{{ url('editAppointment/${appointment.id}') }}' class='btn btn-primary'>Edit</a><a href='{{ url('deleteAppointment/${appointment.id}') }}' class='btn btn-danger'>Delete</a></li>`;
             });
         }
-        function changeSelectedInput(){
-            test.innerText = "<?php changeInput()?>";
+
+        const selectMonth = document.querySelector('#selectMonth');
+        const selectYear = document.querySelector('#selectYear');
+
+        selectMonth.addEventListener('change', (e) => {
+            changeSelectedMonth(e.target.value);
+        });
+        selectYear.addEventListener('change', (e) => {
+            changeSelectedYear(e.target.value);
+        });
+
+        function changeSelectedMonth(month) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: 'inputSelectedMonth',
+                data: {
+                    month: month
+                }
+            })
         }
-        </script>
+
+        function changeSelectedYear(year) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: 'inputSelectedYear',
+                data: {
+                    year: year
+                }
+            })
+        }
+        function reload(){
+            setTimeout(() => {
+                location.reload();
+            }, 250);
+        }
+
+        
+    </script>
 </x-app-layout>

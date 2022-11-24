@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
@@ -43,6 +44,14 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+
+        $currentMonth = "november";
+        $currentYear = 2022;
+        DB::table("monthSelection")->insert([
+            "month" => $currentMonth,
+            "year" => $currentYear,
+            "userId" => $user->id
         ]);
 
         event(new Registered($user));

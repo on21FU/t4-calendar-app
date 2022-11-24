@@ -15,7 +15,8 @@ class AppointmentController extends Controller
         $monthsData = Month::all();
         $user = Auth::user();
         $appointmentData = DB::table('appointments')->where('userId', '=', $user->id)->get();
-        $allData = array($monthsData, $appointmentData);
+        $monthSelection = DB::table("monthSelection")->where("userId", "=", $user->id)->first();
+        $allData = array($monthsData, $appointmentData, $monthSelection->month, $monthSelection->year);
         
         return view('listAppointments', compact('allData'));
     }
@@ -67,12 +68,6 @@ class AppointmentController extends Controller
     public function getAppointmentsByDate(Request $request){
         $appointments = Appointment::where('date', '=', $request->date)->get();
         return response($appointments);
-    }
-    public function loadInputData(Request $request){
-        $selectedYear = $request->selectYear;
-        $selectedMonth = $request->selectMonth;
-        $selectedInput [] = array($selectedMonth, $selectedYear);
-        return redirect()->route("listAppointments", compact('selectedInput'));
     }
 
 }
