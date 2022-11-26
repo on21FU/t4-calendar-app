@@ -239,9 +239,9 @@ function openAppointmentInfo()
                     <option value="june">June</option>
                     <option value="july">July</option>
                     <option value="september">September</option>
-                    <option value="october">Oktober</option>
+                    <option value="october">October</option>
                     <option value="november">November</option>
-                    <option value="december">Dezember</option>
+                    <option value="december">December</option>
                 </select>
                 <select name="selectYear" id="selectYear" onchange="reload()">
                     <option value="2022">2022</option>
